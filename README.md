@@ -8,18 +8,28 @@ attributes from the XML response
 - Java 8 or higher
 - Maven (for building and managing dependencies)
 
+## Dependencies
+### [Jackson Library]
+- **Usage:** Used for XML to JSON conversion.
+
+### [JsonPath Library]
+- **Usage:** Used for extracting specific data from JSON responses.
+
+### [Json Smart Library]
+- **Usage:** Used for working with JSON data.
+
 ## Getting Started
 
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/yourusername/yourproject.git
+    git clone https://github.com/asmaFarouk/XmlToJsonConverter.git
     ```
 
 2. Navigate to the project directory:
 
     ```bash
-    cd yourproject
+    cd XmlToJsonConverter
     ```
 
 3. Build the project using Maven:
