@@ -10,13 +10,13 @@ attributes from the XML response
 
 ## Dependencies
 ### [Jackson Library]
-- **Usage:** Used for XML to JSON conversion.
+- Used for XML to JSON conversion.
 
 ### [JsonPath Library]
-- **Usage:** Used for extracting specific data from JSON responses.
+- Used for extracting specific data from JSON responses.
 
 ### [Json Smart Library]
-- **Usage:** Used for working with JSON data.
+- Used for working with JSON data.
 
 ## Getting Started
 
