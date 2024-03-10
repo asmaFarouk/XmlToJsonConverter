@@ -46,11 +46,25 @@ You can run the application using the following command:
 mvn exec:java
  ```
 
+## Configuring Attributes
+
+You can customize the attributes extracted from the JSON output by adding entries to the `config.properties` file.
+
+### Adding Attributes
+
+Follow the format below for each attribute:
+
+```properties
+totalAttributes= total number of attributes in the config file
+attributeNumber.parentPath=parentPathHere
+attributeNumber.attributeName=attributeNameHere
+```
+- **attributeNumber** : A unique identifier for each attribute.
+- **parentPath** : The JSON path to the parent node of the attribute.
+- **attributeName** : The name of the attribute.
+
 ## Test Output
 
 After running the program, check the output at the terminal. 
-The following values should appear:
+The values of the attributes should appear at the terminal.
 
-
-- **DecisionFlowId=** 12
-- **SCORE=** 301

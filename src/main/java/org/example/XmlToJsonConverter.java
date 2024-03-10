@@ -1,57 +1,37 @@
 package org.example;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import com.jayway.jsonpath.JsonPath;
-import net.minidev.json.JSONArray;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+
+import java.io.*;
 
 public class XmlToJsonConverter {
 
-    public static String convertXmlToJson(String xmlString) throws Exception {
+    public static JsonNode convertXmlToJson(String xmlFilePath) throws IOException {
         XmlMapper xmlMapper = new XmlMapper();
-        JsonNode jsonNode = xmlMapper.readTree(xmlString);
-        ObjectMapper objectMapper = new ObjectMapper();
-        return objectMapper.writeValueAsString(jsonNode);
+        return xmlMapper.readTree(new File(xmlFilePath)).get("Body").get("ProcessRequestResponse").get("Response").get("responseData");
     }
 
-    public static String getDecisionFlowId(String jsonString) {
-        try {
-            return JsonPath.read(jsonString, "$.Body.ProcessRequestResponse.Response.responseData.Results.ExecuteDecisionSmartResponse.ExecuteDecisionSmartResult.DecisionFlowId");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
+    public static String getNestedAttributeValue(JsonNode jsonNode, String parentPath, String attributeName) {
+        String[] parentPathArray = parentPath.split("/");
+        JsonNode currentNode = jsonNode;
 
-    public static String getScoreValue(String jsonString) {
-        try {
-            JSONArray scoreArray = JsonPath.read(jsonString, "$.Body.ProcessRequestResponse.Response.responseData.Results.ExecuteDecisionSmartResponse.ExecuteDecisionSmartResult.DecisionSmartResults[?(@.ResultOutput.Name == 'SCORE')].ResultOutput.Value");
-
-            if (!scoreArray.isEmpty()) {
-                return scoreArray.get(0).toString();
+        for (String path : parentPathArray) {
+            if (path.matches("\\d+")) {
+                int index = Integer.parseInt(path);
+                if (currentNode.isArray() && currentNode.size() > index) {
+                    currentNode = currentNode.path(index);
+                }
+            } else {
+                currentNode = currentNode.path(path);
             }
-            return null;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-            String xmlFilePath = System.getProperty("user.dir") + "/resources/XMLResponseData.xml";
-            String xmlContent = new String(Files.readAllBytes(Paths.get(xmlFilePath)));
-            String jsonString = convertXmlToJson(xmlContent);
-            String decisionFlowId = getDecisionFlowId(jsonString);
-            System.out.println("DecisionFlowId= " + decisionFlowId);
-            String score = getScoreValue(jsonString);
-            System.out.println("SCORE= " + score);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
+        JsonNode valueNode = currentNode.path(attributeName);
+        if (valueNode.isMissingNode()) {
+            System.out.println("Missing node for attribute: " + attributeName);
+            return null;
+        }
+        return valueNode.asText();
     }
 }
