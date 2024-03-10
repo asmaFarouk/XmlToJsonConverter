@@ -55,7 +55,6 @@ You can customize the attributes extracted from the JSON output by adding entrie
 Follow the format below for each attribute:
 
 ```properties
-totalAttributes= total number of attributes in the config file
 attributeNumber.parentPath=parentPathHere
 attributeNumber.attributeName=attributeNameHere
 ```
